@@ -1,110 +1,112 @@
 # CodeNovel
 
-CodeNovel is a Textual-based terminal toy that recreates the look of a Codex-style coding session while hiding a TXT novel in the middle of the screen as dim "inactive output".
+[English README](./README_EN.md)
 
-It can run in two modes:
-- Synthetic mode: generates a believable stream of fake coding activity, diffs, warnings, and status updates.
-- Replay mode: parses a real Codex CLI transcript and replays it inside the same interface.
+CodeNovel 是一个基于 Textual 的终端小项目。它会模拟出类似 Codex CLI 正在工作的界面，同时把一份 TXT 文本隐藏在屏幕中间，并伪装成一块灰掉的“非活动终端输出”。
 
-The result is half terminal simulator, half stealth text reader.
+它支持两种运行模式：
+- 合成模式：自动生成看起来比较真实的命令、diff、警告、进度和总结输出。
+- 回放模式：解析真实的 Codex CLI 日志，并在同一套界面里回放出来。
 
-## Why This Exists
+它本质上是一个“终端伪装器 + TXT 阅读器”的组合项目。
 
-CodeNovel is built for a very specific joke and aesthetic:
-- the screen looks like an AI coding session in progress
-- the center pane quietly contains the text you actually want to read
-- the surrounding transcript keeps the terminal feeling alive
+## 项目简介
 
-If you like terminal UI experiments, Codex-style visuals, or weird reading tools, this project is for you.
+这个项目的核心乐趣很明确：
+- 屏幕看起来像 AI 正在认真写代码
+- 中间那块不起眼的区域其实在显示你真正想看的 TXT 内容
+- 周围不断滚动的终端活动会让整个界面保持“正在工作”的错觉
 
-## Features
+如果你喜欢终端 UI、Codex 风格界面、带一点恶作剧意味的工具，或者单纯想做一个隐蔽阅读器，这个项目就是为这种场景做的。
 
-- Codex-like terminal layout built with [Textual](https://github.com/Textualize/textual) and Rich
-- Hidden TXT reader rendered as dim, inactive terminal output
-- Synthetic transcript generator with commands, summaries, diffs, warnings, and progress lines
-- Real log replay mode via `--log`
-- Keyboard and mouse-wheel reading controls for the hidden text pane
-- Footer metadata for model, provider, token count, and project path
-- UTF-8 and `gb18030` TXT decoding support
+## 功能特性
 
-## Requirements
+- 基于 [Textual](https://github.com/Textualize/textual) 和 Rich 构建的 Codex 风格终端界面
+- 将 TXT 文本伪装成灰暗的“失活输出”进行阅读
+- 内置合成活动流，包含命令、摘要、diff、警告和进度输出
+- 支持通过 `--log` 回放真实 Codex CLI 日志
+- 支持键盘和鼠标滚轮控制中间阅读区
+- 底部状态栏显示模型、提供方、token 数和项目路径
+- 支持 UTF-8 和 `gb18030` 两种 TXT 编码读取
 
-- Python 3.10+
-- A terminal with decent Unicode and 24-bit color support
+## 运行要求
 
-For the cleanest visual result, use Windows Terminal, iTerm2, WezTerm, or another modern terminal emulator. It will still run in classic `cmd`, but glyphs and colors may look rougher.
+- Python 3.10 及以上
+- 支持较好 Unicode 和 24 位颜色的终端
 
-## Installation
+为了获得更接近设计效果的显示，建议使用 Windows Terminal、iTerm2、WezTerm 这类现代终端。传统 `cmd` 也能运行，但字形和颜色表现可能会更粗糙一些。
 
-Install from the project root:
+## 安装
+
+在项目根目录执行：
 
 ```bash
 pip install .
 ```
 
-For development:
+开发模式安装：
 
 ```bash
 pip install -e .
 ```
 
-If your environment does not expose the `codenovel` script on `PATH`, use:
+如果当前环境没有把 `codenovel` 脚本加入 `PATH`，可以直接使用：
 
 ```bash
 python -m codenovel
 ```
 
-On Windows, this repo also includes a local [`codenovel.bat`](./codenovel.bat) wrapper for convenience when you launch from the project directory.
+Windows 下仓库中还带了一个本地启动包装脚本 [`codenovel.bat`](./codenovel.bat)，在项目目录里可以直接调用。
 
-## Quick Start
+## 快速开始
 
-Run with a TXT file:
+读取一份 TXT 文件：
 
 ```bash
 codenovel path/to/novel.txt
 ```
 
-Set a custom fake task title:
+自定义顶部假任务标题：
 
 ```bash
 codenovel path/to/novel.txt --title "Refactor transcript renderer"
 ```
 
-Replay a real Codex terminal log instead of generating fake activity:
+回放真实的 Codex 日志，而不是生成伪造活动流：
 
 ```bash
 codenovel path/to/novel.txt --log path/to/codex-session.txt
 ```
 
-Speed up the lower activity stream:
+加快底部活动流刷新速度：
 
 ```bash
 codenovel path/to/novel.txt --bottom-interval 2.5
 ```
 
-Make the novel pane auto-scroll together with the lower log stream:
+让中间 TXT 阅读区随着底部活动一起自动滚动：
 
 ```bash
 codenovel path/to/novel.txt --follow-log-scroll
 ```
 
-Run without a TXT file to show the built-in placeholder instructions:
+不传入 TXT 文件时，会显示项目内置的占位说明：
 
 ```bash
 codenovel
 ```
 
-## Controls
+## 操作方式
 
-- `j` or `Down`: scroll the hidden TXT reader down
-- `k` or `Up`: scroll the hidden TXT reader up
-- `PageDown`: scroll down faster
-- `PageUp`: scroll up faster
-- `space`: pause or resume the synthetic / replayed activity
-- `q`: quit
-- Mouse wheel over the center reader: scroll the TXT content without moving the main transcript
+- `j` 或 `Down`：向下滚动隐藏阅读区
+- `k` 或 `Up`：向上滚动隐藏阅读区
+- `PageDown`：快速向下滚动
+- `PageUp`：快速向上滚动
+- `space`：暂停或继续合成 / 回放活动
+- `q`：退出
+- 鼠标滚轮放在中间阅读区上：只滚动 TXT 内容，不滚动外层主转录区域
 
-## Command-Line Options
+## 命令行参数
 
 ```text
 usage: codenovel [-h] [--title TITLE] [--model MODEL] [--provider PROVIDER]
@@ -114,64 +116,64 @@ usage: codenovel [-h] [--title TITLE] [--model MODEL] [--provider PROVIDER]
                  [book]
 ```
 
-Arguments:
+参数说明：
 
-- `book`: path to a `.txt` file
-- `--title`: fake task title shown in the transcript
-- `--model`: short model label shown in the footer
-- `--provider`: provider tag shown next to the model name
-- `--model-full`: full model description for the footer second line
-- `--project`: project name shown in the footer
-- `--log`: path to a real Codex terminal log to parse and replay
-- `--bottom-interval`: seconds between bottom stream updates
-- `--follow-log-scroll`: auto-scroll the TXT pane with lower log updates
-- `--no-follow-log-scroll`: keep TXT scrolling independent
+- `book`：要读取的 `.txt` 文件路径
+- `--title`：显示在转录内容里的假任务标题
+- `--model`：底部状态栏显示的模型简称
+- `--provider`：模型名称后面的提供方标签
+- `--model-full`：底部第二行显示的完整模型描述
+- `--project`：底部状态栏显示的项目名
+- `--log`：真实 Codex 终端日志路径，用于解析和回放
+- `--bottom-interval`：底部活动流的刷新间隔秒数
+- `--follow-log-scroll`：让 TXT 阅读区跟随底部活动自动滚动
+- `--no-follow-log-scroll`：保持 TXT 阅读区与底部活动独立
 
-## Input Notes
+## 输入文件说明
 
-- Only `.txt` books are supported right now.
-- TXT files are first read as UTF-8, then retried as `gb18030` if UTF-8 decoding fails.
-- If the path does not exist, the app shows an inline error message inside the reader pane.
-- Empty TXT files fall back to built-in placeholder content.
+- 当前只支持 `.txt` 文件。
+- 读取时会优先按 UTF-8 解码，失败后自动回退到 `gb18030`。
+- 如果文件路径不存在，界面中间会直接显示错误信息。
+- 如果 TXT 内容为空，会回退到项目内置的占位文本。
 
-## How It Works
+## 项目结构
 
-CodeNovel is organized around a few small components:
+CodeNovel 目前主要由下面几个模块组成：
 
-- [`codenovel/ui_app.py`](./codenovel/ui_app.py): the main Textual UI, layout, colors, scrolling behavior, and diff rendering
-- [`codenovel/simulator.py`](./codenovel/simulator.py): synthetic transcript generation
-- [`codenovel/logparser.py`](./codenovel/logparser.py): parser for replaying real Codex CLI logs
-- [`codenovel/reader.py`](./codenovel/reader.py): TXT loading and line splitting
-- [`codenovel/cli.py`](./codenovel/cli.py): argument parsing and app startup
+- [`codenovel/ui_app.py`](./codenovel/ui_app.py)：主界面、布局、颜色、滚动逻辑和 diff 渲染
+- [`codenovel/simulator.py`](./codenovel/simulator.py)：合成终端活动流生成器
+- [`codenovel/logparser.py`](./codenovel/logparser.py)：真实 Codex CLI 日志解析器
+- [`codenovel/reader.py`](./codenovel/reader.py)：TXT 读取与分行处理
+- [`codenovel/cli.py`](./codenovel/cli.py)：命令行参数解析与应用启动入口
 
-## Development
+## 开发
 
-Run the app directly from source:
+直接从源码运行：
 
 ```bash
 python -m codenovel demo_novel.txt
 ```
 
-Install editable dependencies:
+开发模式安装：
 
 ```bash
 pip install -e .
 ```
 
-Useful files in this repo:
+仓库里几个比较重要的文件：
 
-- [`demo_novel.txt`](./demo_novel.txt): sample TXT content
-- [`pyproject.toml`](./pyproject.toml): package metadata and dependencies
+- [`demo_novel.txt`](./demo_novel.txt)：示例 TXT 文本
+- [`pyproject.toml`](./pyproject.toml)：包元数据和依赖配置
 
-## Positioning
+## 仓库展示建议
 
-If you want a clean GitHub presentation, I would use:
+如果这个项目放到 GitHub 首页展示，我建议：
 
-- Project name: `CodeNovel`
-- Short description: `A Codex-style terminal simulator that hides a TXT novel inside a dimmed center pane.`
+- 仓库名使用 `CodeNovel`
+- 仓库简介使用：`一个 Codex 风格的终端模拟器，把 TXT 小说隐藏在中间一块灰掉的终端区域里。`
 
-That keeps the repo name readable, explains the joke immediately, and still matches the existing package name `codenovel`.
+这样名字足够直观，简介也能第一眼把项目的玩法说明白，同时又和现有包名 `codenovel` 保持一致。
 
 ## License
 
-This project is published under the MIT license according to [`pyproject.toml`](./pyproject.toml).
+项目当前采用 MIT License，具体见 [`LICENSE`](./LICENSE) 和 [`pyproject.toml`](./pyproject.toml)。
