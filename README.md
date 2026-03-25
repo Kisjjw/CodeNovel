@@ -26,6 +26,9 @@ CodeNovel 是一个基于 Textual 的终端小项目。它会模拟出类似 Cod
 - 内置合成活动流，包含命令、摘要、diff、警告和进度输出
 - 支持通过 `--log` 回放真实 Codex CLI 日志
 - 支持键盘和鼠标滚轮控制中间阅读区
+- 支持通过参数开启或关闭阅读区随机纯白高亮行
+- 自动记住每本 TXT 上次阅读到的原始行号
+- 支持通过参数指定从原 TXT 的第几行开始阅读
 - 底部状态栏显示模型、提供方、token 数和项目路径
 - 支持 UTF-8 和 `gb18030` 两种 TXT 编码读取
 
@@ -90,6 +93,18 @@ codenovel path/to/novel.txt --bottom-interval 2.5
 codenovel path/to/novel.txt --follow-log-scroll
 ```
 
+关闭小说阅读区里随机出现的纯白高亮行：
+
+```bash
+codenovel path/to/novel.txt --no-reader-highlight
+```
+
+从原 TXT 的第 1200 行开始阅读，这会覆盖已保存的阅读进度：
+
+```bash
+codenovel path/to/novel.txt --start-line 1200
+```
+
 不传入 TXT 文件时，会显示项目内置的占位说明：
 
 ```bash
@@ -112,7 +127,8 @@ codenovel
 usage: codenovel [-h] [--title TITLE] [--model MODEL] [--provider PROVIDER]
                  [--model-full MODEL_FULL] [--project PROJECT] [--log LOG]
                  [--bottom-interval BOTTOM_INTERVAL] [--follow-log-scroll]
-                 [--no-follow-log-scroll]
+                 [--no-follow-log-scroll] [--reader-highlight]
+                 [--no-reader-highlight] [--start-line START_LINE]
                  [book]
 ```
 
@@ -128,6 +144,9 @@ usage: codenovel [-h] [--title TITLE] [--model MODEL] [--provider PROVIDER]
 - `--bottom-interval`：底部活动流的刷新间隔秒数
 - `--follow-log-scroll`：让 TXT 阅读区跟随底部活动自动滚动
 - `--no-follow-log-scroll`：保持 TXT 阅读区与底部活动独立
+- `--reader-highlight`：启用阅读区随机纯白高亮行
+- `--no-reader-highlight`：关闭阅读区随机纯白高亮行
+- `--start-line`：从原 TXT 的第几行开始阅读，使用 1-based 行号，并覆盖已保存进度
 
 ## 输入文件说明
 
@@ -135,6 +154,8 @@ usage: codenovel [-h] [--title TITLE] [--model MODEL] [--provider PROVIDER]
 - 读取时会优先按 UTF-8 解码，失败后自动回退到 `gb18030`。
 - 如果文件路径不存在，界面中间会直接显示错误信息。
 - 如果 TXT 内容为空，会回退到项目内置的占位文本。
+- 阅读进度会按原始 TXT 行号保存在 `~/.codenovel/progress.json`。
+- 未传 `--start-line` 时，程序默认恢复到上次阅读位置。
 
 ## 项目结构
 
@@ -143,6 +164,7 @@ CodeNovel 目前主要由下面几个模块组成：
 - [`codenovel/ui_app.py`](./codenovel/ui_app.py)：主界面、布局、颜色、滚动逻辑和 diff 渲染
 - [`codenovel/simulator.py`](./codenovel/simulator.py)：合成终端活动流生成器
 - [`codenovel/logparser.py`](./codenovel/logparser.py)：真实 Codex CLI 日志解析器
+- [`codenovel/progress.py`](./codenovel/progress.py)：每本 TXT 的阅读进度记录
 - [`codenovel/reader.py`](./codenovel/reader.py)：TXT 读取与分行处理
 - [`codenovel/cli.py`](./codenovel/cli.py)：命令行参数解析与应用启动入口
 

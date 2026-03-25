@@ -40,4 +40,4 @@ def split_book_lines(content: str) -> list[str]:
     lines = [line.rstrip() for line in content.splitlines()]
     if not lines:
         lines = PLACEHOLDER_TEXT.splitlines()
-    return [f"  {line}" for line in lines if line]
+    return [f"  {line if line else ' '}" for line in lines]

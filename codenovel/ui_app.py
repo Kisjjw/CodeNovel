@@ -19,6 +19,7 @@ from textual.reactive import reactive
 from textual.scrollbar import ScrollBarRender
 from textual.widgets import Static
 
+from codenovel.progress import BookProgressStore
 from codenovel.reader import load_book_text, split_book_lines
 from codenovel.simulator import FakeLogEngine, RenderedLine, ReplayEngine
 
@@ -250,14 +251,20 @@ class CodeNovelApp(App[None]):
         project_name: str | None = None,
         project_path: str | None = None,
         log_path: Path | None = None,
-        bottom_interval: float = 6.0,
+        bottom_interval: float = 4.0,
         follow_log_scroll: bool = False,
+        reader_highlight: bool = True,
+        start_line: int | None = None,
+        progress_store: BookProgressStore | None = None,
     ) -> None:
         super().__init__()
         self.book_path = book_path
         self.task_title = task_title
         self.bottom_interval = max(0.1, bottom_interval)
         self.follow_log_scroll = follow_log_scroll
+        self.reader_highlight = reader_highlight
+        self.start_line = start_line if start_line is None else max(1, start_line)
+        self.progress_store = progress_store or BookProgressStore()
         self.started_at = monotonic()
         self._book_source_lines: list[str] = []
         self._book_source_index = 0
@@ -268,6 +275,9 @@ class CodeNovelApp(App[None]):
         self.book_lines: list[str] = []
         self.book_offset = 0
         self._book_line_highlights: list[bool] = []
+        self._book_visual_to_source_line: list[int] = []
+        self._book_source_to_visual_line: list[int] = []
+        self._last_saved_source_line: int | None = None
         self.recent_lines: list[Text] = []
 
         if log_path and log_path.exists():
@@ -309,9 +319,13 @@ class CodeNovelApp(App[None]):
         self._render_footer()
         self._seed_logs()
         self._update_working_line()
+        self.call_after_refresh(self._scroll_app_to_bottom)
         self.set_interval(self.bottom_interval, self._tick_bottom)
         self.set_interval(1.0, self._tick_clock)
         self.set_interval(0.08, self._tick_book_loader)
+
+    def _scroll_app_to_bottom(self) -> None:
+        self.query_one("#app-scroll", VerticalScroll).scroll_end(animate=False, immediate=True)
 
     def _render_transcript(self) -> None:
         preview = Text()
@@ -333,6 +347,11 @@ class CodeNovelApp(App[None]):
         self.book_lines = []
         self.book_offset = 0
         self._book_line_highlights = []
+        self._book_visual_to_source_line = []
+        self._book_source_to_visual_line = []
+        initial_source_line = self._initial_source_line_number()
+        self._ensure_source_line_available(initial_source_line)
+        self.book_offset = self._visual_offset_for_source_line(initial_source_line)
         self._process_book_batch(INITIAL_BOOK_BATCH)
         self._render_book_view()
 
@@ -360,6 +379,7 @@ class CodeNovelApp(App[None]):
             row.append(line, style=line_style)
             block.append_text(self._pad_line(row, line_style))
         self.query_one("#reader-text", BookReader).update(block)
+        self._save_book_progress()
 
     def _render_reader_label(self) -> None:
         label_background = self._reader_overlay_backgrounds(VISIBLE_BOOK_LINES + 1)[0]
@@ -507,18 +527,68 @@ class CodeNovelApp(App[None]):
         if self._book_processing_complete:
             return
         end_index = min(self._book_source_index + source_line_count, len(self._book_source_lines))
-        for line in self._book_source_lines[self._book_source_index : end_index]:
+        for source_index, line in enumerate(
+            self._book_source_lines[self._book_source_index : end_index],
+            start=self._book_source_index,
+        ):
+            self._book_source_to_visual_line.append(len(self.book_lines))
             wrapped_lines = wrap_line(line, self._book_wrap_width)
             for wrapped_line in wrapped_lines:
                 self.book_lines.append(wrapped_line)
+                self._book_visual_to_source_line.append(source_index)
                 self._book_line_highlights.append(self._next_book_line_highlight(wrapped_line))
         self._book_source_index = end_index
         self._book_processing_complete = self._book_source_index >= len(self._book_source_lines)
+
+    def _initial_source_line_number(self) -> int:
+        if self.start_line is not None:
+            return self._clamp_source_line_number(self.start_line)
+        if self.book_path and self.book_path.exists():
+            saved_line = self.progress_store.load(self.book_path)
+            if saved_line is not None:
+                return self._clamp_source_line_number(saved_line)
+        return 1
+
+    def _ensure_source_line_available(self, line_number: int) -> None:
+        target_index = self._clamp_source_line_number(line_number) - 1
+        while self._book_source_index <= target_index and not self._book_processing_complete:
+            remaining = target_index + 1 - self._book_source_index
+            self._process_book_batch(max(INITIAL_BOOK_BATCH, remaining))
+
+    def _visual_offset_for_source_line(self, line_number: int) -> int:
+        if not self._book_source_to_visual_line:
+            return 0
+        source_index = self._clamp_source_line_number(line_number) - 1
+        source_index = min(source_index, len(self._book_source_to_visual_line) - 1)
+        return self._book_source_to_visual_line[source_index]
+
+    def _clamp_source_line_number(self, line_number: int) -> int:
+        if not self._book_source_lines:
+            return 1
+        return max(1, min(line_number, len(self._book_source_lines)))
+
+    def _current_source_line_number(self) -> int:
+        if not self._book_visual_to_source_line:
+            return 1
+        visual_index = max(0, min(self.book_offset, len(self._book_visual_to_source_line) - 1))
+        return self._book_visual_to_source_line[visual_index] + 1
+
+    def _save_book_progress(self) -> None:
+        if self.book_path is None or not self.book_path.exists():
+            return
+        current_source_line = self._current_source_line_number()
+        if current_source_line == self._last_saved_source_line:
+            return
+        self.progress_store.save(self.book_path, current_source_line)
+        self._last_saved_source_line = current_source_line
 
     def _line_is_highlighted(self, line_index: int) -> bool:
         return 0 <= line_index < len(self._book_line_highlights) and self._book_line_highlights[line_index]
 
     def _next_book_line_highlight(self, line: str) -> bool:
+        if not self.reader_highlight:
+            return False
+
         if not line.strip():
             self._highlight_streak_active = False
             self._highlight_gap_remaining = max(self._highlight_gap_remaining, READER_MIN_GRAY_GAP)
@@ -881,4 +951,8 @@ class CodeNovelApp(App[None]):
     def action_page_up(self) -> None:
         self.book_offset -= VISIBLE_BOOK_LINES
         self._render_book_view()
+
+    async def action_quit(self) -> None:
+        self._save_book_progress()
+        self.exit()
 

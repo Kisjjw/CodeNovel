@@ -24,6 +24,9 @@ If you like terminal UI experiments, Codex-style visuals, or weird reading tools
 - Synthetic transcript generator with commands, summaries, diffs, warnings, and progress lines
 - Real log replay mode via `--log`
 - Keyboard and mouse-wheel reading controls for the hidden text pane
+- CLI toggle for the hidden reader's occasional pure-white highlight lines
+- Automatic per-book reading position memory using original TXT line numbers
+- CLI option to start from a specific line in the original TXT file
 - Footer metadata for model, provider, token count, and project path
 - UTF-8 and `gb18030` TXT decoding support
 
@@ -88,6 +91,18 @@ Make the novel pane auto-scroll together with the lower log stream:
 codenovel path/to/novel.txt --follow-log-scroll
 ```
 
+Disable the hidden reader's occasional pure-white highlight lines:
+
+```bash
+codenovel path/to/novel.txt --no-reader-highlight
+```
+
+Start from line 1200 in the original TXT file. This overrides saved reading progress:
+
+```bash
+codenovel path/to/novel.txt --start-line 1200
+```
+
 Run without a TXT file to show the built-in placeholder instructions:
 
 ```bash
@@ -110,7 +125,8 @@ codenovel
 usage: codenovel [-h] [--title TITLE] [--model MODEL] [--provider PROVIDER]
                  [--model-full MODEL_FULL] [--project PROJECT] [--log LOG]
                  [--bottom-interval BOTTOM_INTERVAL] [--follow-log-scroll]
-                 [--no-follow-log-scroll]
+                 [--no-follow-log-scroll] [--reader-highlight]
+                 [--no-reader-highlight] [--start-line START_LINE]
                  [book]
 ```
 
@@ -126,6 +142,9 @@ Arguments:
 - `--bottom-interval`: seconds between bottom stream updates
 - `--follow-log-scroll`: auto-scroll the TXT pane with lower log updates
 - `--no-follow-log-scroll`: keep TXT scrolling independent
+- `--reader-highlight`: enable occasional pure-white highlight lines in the hidden TXT reader
+- `--no-reader-highlight`: disable the hidden TXT reader's random pure-white highlight lines
+- `--start-line`: start reading from this 1-based line number in the original TXT file, overriding saved progress
 
 ## Input Notes
 
@@ -133,6 +152,8 @@ Arguments:
 - TXT files are first read as UTF-8, then retried as `gb18030` if UTF-8 decoding fails.
 - If the path does not exist, the app shows an inline error message inside the reader pane.
 - Empty TXT files fall back to built-in placeholder content.
+- Reading progress is stored by original TXT line number in `~/.codenovel/progress.json`.
+- If `--start-line` is not provided, the app restores the last saved reading position by default.
 
 ## How It Works
 
@@ -141,6 +162,7 @@ CodeNovel is organized around a few small components:
 - [`codenovel/ui_app.py`](./codenovel/ui_app.py): the main Textual UI, layout, colors, scrolling behavior, and diff rendering
 - [`codenovel/simulator.py`](./codenovel/simulator.py): synthetic transcript generation
 - [`codenovel/logparser.py`](./codenovel/logparser.py): parser for replaying real Codex CLI logs
+- [`codenovel/progress.py`](./codenovel/progress.py): per-book reading progress persistence
 - [`codenovel/reader.py`](./codenovel/reader.py): TXT loading and line splitting
 - [`codenovel/cli.py`](./codenovel/cli.py): argument parsing and app startup
 

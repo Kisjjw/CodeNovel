@@ -50,8 +50,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--bottom-interval",
         type=float,
-        default=6.0,
-        help="Seconds between bottom log updates (default: 6.0).",
+        default=4.0,
+        help="Seconds between bottom log updates (default: 4.0).",
     )
     parser.add_argument(
         "--follow-log-scroll",
@@ -65,7 +65,25 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_false",
         help="Keep the novel pane independent from bottom log updates.",
     )
-    parser.set_defaults(follow_log_scroll=False)
+    parser.add_argument(
+        "--reader-highlight",
+        dest="reader_highlight",
+        action="store_true",
+        help="Enable occasional pure-white highlight lines in the hidden TXT reader.",
+    )
+    parser.add_argument(
+        "--no-reader-highlight",
+        dest="reader_highlight",
+        action="store_false",
+        help="Disable the hidden TXT reader's random pure-white highlight lines.",
+    )
+    parser.add_argument(
+        "--start-line",
+        type=int,
+        default=None,
+        help="Start reading from this 1-based line number in the TXT file. Overrides saved progress.",
+    )
+    parser.set_defaults(follow_log_scroll=False, reader_highlight=True)
     return parser
 
 
@@ -86,5 +104,7 @@ def main() -> None:
         log_path=log_path,
         bottom_interval=args.bottom_interval,
         follow_log_scroll=args.follow_log_scroll,
+        reader_highlight=args.reader_highlight,
+        start_line=args.start_line,
     )
     app.run()
