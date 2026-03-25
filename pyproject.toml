@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codenovel"
+version = "0.1.0"
+description = "A Codex-style terminal simulator that hides a TXT novel inside a dimmed center pane."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Kisjjw" }
+]
+dependencies = [
+  "textual>=0.58,<1.0",
+  "rich>=13.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/Kisjjw/CodeNovel"
+Repository = "https://github.com/Kisjjw/CodeNovel"
+Issues = "https://github.com/Kisjjw/CodeNovel/issues"
+
+[project.scripts]
+codenovel = "codenovel.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
