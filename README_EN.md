@@ -180,19 +180,16 @@ Install editable dependencies:
 pip install -e .
 ```
 
+Recommended test command:
+
+```bash
+.\codenovel .\demo_novel.txt --log .\CWINDOWSsystem32cmd.txt --bottom-interval 1.5
+```
+
 Useful files in this repo:
 
 - [`demo_novel.txt`](./demo_novel.txt): sample TXT content
 - [`pyproject.toml`](./pyproject.toml): package metadata and dependencies
-
-## Positioning
-
-If you want a clean GitHub presentation, I would use:
-
-- Project name: `CodeNovel`
-- Short description: `A Codex-style terminal simulator that hides a TXT novel inside a dimmed center pane.`
-
-That keeps the repo name readable, explains the joke immediately, and still matches the existing package name `codenovel`.
 
 ## License
 

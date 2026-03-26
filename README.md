@@ -182,19 +182,16 @@ python -m codenovel demo_novel.txt
 pip install -e .
 ```
 
+推荐测试方式：
+
+```bash
+.\codenovel .\demo_novel.txt --log .\CWINDOWSsystem32cmd.txt --bottom-interval 1.5
+```
+
 仓库里几个比较重要的文件：
 
 - [`demo_novel.txt`](./demo_novel.txt)：示例 TXT 文本
 - [`pyproject.toml`](./pyproject.toml)：包元数据和依赖配置
-
-## 仓库展示建议
-
-如果这个项目放到 GitHub 首页展示，我建议：
-
-- 仓库名使用 `CodeNovel`
-- 仓库简介使用：`一个 Codex 风格的终端模拟器，把 TXT 小说隐藏在中间一块灰掉的终端区域里。`
-
-这样名字足够直观，简介也能第一眼把项目的玩法说明白，同时又和现有包名 `codenovel` 保持一致。
 
 ## License
 
