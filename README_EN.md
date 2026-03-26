@@ -10,8 +10,9 @@ The result is half terminal simulator, half stealth text reader.
 
 ## Demo
 
-[![CodeNovel demo screenshot](./demo.jpg)](./demo.mp4)
+[![CodeNovel demo animation](./demo.gif)](./demo.mp4)
 
+- Animated preview: [`demo.gif`](./demo.gif)
 - Image preview: [`demo.jpg`](./demo.jpg)
 - Video demo: [`demo.mp4`](./demo.mp4)
 

@@ -12,8 +12,9 @@ CodeNovel 是一个基于 Textual 的终端小项目。它会模拟出类似 Cod
 
 ## 演示
 
-[![CodeNovel 演示截图](./demo.jpg)](./demo.mp4)
+[![CodeNovel 演示动图](./demo.gif)](./demo.mp4)
 
+- 动图预览：[`demo.gif`](./demo.gif)
 - 图片预览：[`demo.jpg`](./demo.jpg)
 - 视频演示：[`demo.mp4`](./demo.mp4)
 
