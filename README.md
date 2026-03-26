@@ -10,6 +10,13 @@ CodeNovel 是一个基于 Textual 的终端小项目。它会模拟出类似 Cod
 
 它本质上是一个“终端伪装器 + TXT 阅读器”的组合项目。
 
+## 演示
+
+[![CodeNovel 演示截图](./demo.jpg)](./demo.mp4)
+
+- 图片预览：[`demo.jpg`](./demo.jpg)
+- 视频演示：[`demo.mp4`](./demo.mp4)
+
 ## 项目简介
 
 这个项目的核心乐趣很明确：
@@ -63,28 +70,24 @@ Windows 下仓库中还带了一个本地启动包装脚本 [`codenovel.bat`](./
 
 ## 快速开始
 
+
+推荐测试方式：
+
+```bash
+codenovel .\demo_novel.txt --log .\codex_log.txt --bottom-interval 1.5
+```
+
+
 读取一份 TXT 文件：
 
 ```bash
 codenovel path/to/novel.txt
 ```
 
-自定义顶部假任务标题：
+从原 TXT 的第 1200 行开始阅读，这会覆盖已保存的阅读进度：
 
 ```bash
-codenovel path/to/novel.txt --title "Refactor transcript renderer"
-```
-
-回放真实的 Codex 日志，而不是生成伪造活动流：
-
-```bash
-codenovel path/to/novel.txt --log path/to/codex-session.txt
-```
-
-加快底部活动流刷新速度：
-
-```bash
-codenovel path/to/novel.txt --bottom-interval 2.5
+codenovel path/to/novel.txt --start-line 1200
 ```
 
 让中间 TXT 阅读区随着底部活动一起自动滚动：
@@ -93,16 +96,28 @@ codenovel path/to/novel.txt --bottom-interval 2.5
 codenovel path/to/novel.txt --follow-log-scroll
 ```
 
+加快底部活动流刷新速度：
+
+```bash
+codenovel path/to/novel.txt --bottom-interval 2.5
+```
+
+回放真实的 Codex 日志，而不是生成伪造活动流：
+
+```bash
+codenovel path/to/novel.txt --log path/to/codex-session.txt
+```
+
 关闭小说阅读区里随机出现的纯白高亮行：
 
 ```bash
 codenovel path/to/novel.txt --no-reader-highlight
 ```
 
-从原 TXT 的第 1200 行开始阅读，这会覆盖已保存的阅读进度：
+自定义顶部假任务标题：
 
 ```bash
-codenovel path/to/novel.txt --start-line 1200
+codenovel path/to/novel.txt --title "Refactor transcript renderer"
 ```
 
 不传入 TXT 文件时，会显示项目内置的占位说明：
@@ -180,12 +195,6 @@ python -m codenovel demo_novel.txt
 
 ```bash
 pip install -e .
-```
-
-推荐测试方式：
-
-```bash
-.\codenovel .\demo_novel.txt --log .\CWINDOWSsystem32cmd.txt --bottom-interval 1.5
 ```
 
 仓库里几个比较重要的文件：

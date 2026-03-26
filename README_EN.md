@@ -8,6 +8,13 @@ It can run in two modes:
 
 The result is half terminal simulator, half stealth text reader.
 
+## Demo
+
+[![CodeNovel demo screenshot](./demo.jpg)](./demo.mp4)
+
+- Image preview: [`demo.jpg`](./demo.jpg)
+- Video demo: [`demo.mp4`](./demo.mp4)
+
 ## Why This Exists
 
 CodeNovel is built for a very specific joke and aesthetic:
@@ -60,6 +67,12 @@ python -m codenovel
 On Windows, this repo also includes a local [`codenovel.bat`](./codenovel.bat) wrapper for convenience when you launch from the project directory.
 
 ## Quick Start
+
+Recommended test command:
+
+```bash
+.\codenovel .\demo_novel.txt --log .\codex_log.txt --bottom-interval 1.5
+```
 
 Run with a TXT file:
 
@@ -180,11 +193,6 @@ Install editable dependencies:
 pip install -e .
 ```
 
-Recommended test command:
-
-```bash
-.\codenovel .\demo_novel.txt --log .\CWINDOWSsystem32cmd.txt --bottom-interval 1.5
-```
 
 Useful files in this repo:
 
