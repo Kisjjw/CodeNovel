@@ -10,7 +10,20 @@ The result is half terminal simulator, half stealth text reader.
 
 ## Demo
 
-[![CodeNovel demo animation](./demo.gif)](./demo.mp4)
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <a href="./demo.jpg">
+        <img src="./demo.jpg" alt="CodeNovel demo screenshot" width="100%">
+      </a>
+    </td>
+    <td width="50%" align="center">
+      <a href="./demo.mp4">
+        <img src="./demo.gif" alt="CodeNovel demo animation" width="100%">
+      </a>
+    </td>
+  </tr>
+</table>
 
 - Animated preview: [`demo.gif`](./demo.gif)
 - Image preview: [`demo.jpg`](./demo.jpg)
