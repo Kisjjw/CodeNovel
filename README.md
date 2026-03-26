@@ -12,24 +12,19 @@ CodeNovel 是一个基于 Textual 的终端小项目。它会模拟出类似 Cod
 
 ## 演示
 
-<table>
-  <tr>
-    <td width="50%" align="center">
-      <a href="./demo.jpg">
-        <img src="./demo.jpg" alt="CodeNovel 演示截图" width="100%">
-      </a>
-    </td>
-    <td width="50%" align="center">
-      <a href="./demo.mp4">
-        <img src="./demo.gif" alt="CodeNovel 演示动图" width="100%">
-      </a>
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <a href="./demo.jpg">
+    <img src="./demo.jpg" alt="CodeNovel 演示截图" width="100%">
+  </a>
+</p>
 
-- 动图预览：[`demo.gif`](./demo.gif)
-- 图片预览：[`demo.jpg`](./demo.jpg)
-- 视频演示：[`demo.mp4`](./demo.mp4)
+<p align="center">
+  <a href="./demo.mp4">
+    <img src="./demo.gif" alt="CodeNovel 演示动图" width="100%">
+  </a>
+</p>
+
+预览资源：[`demo.jpg`](./demo.jpg) | [`demo.gif`](./demo.gif) | [`demo.mp4`](./demo.mp4)
 
 ## 项目简介
 

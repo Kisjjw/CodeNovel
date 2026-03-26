@@ -10,24 +10,19 @@ The result is half terminal simulator, half stealth text reader.
 
 ## Demo
 
-<table>
-  <tr>
-    <td width="50%" align="center">
-      <a href="./demo.jpg">
-        <img src="./demo.jpg" alt="CodeNovel demo screenshot" width="100%">
-      </a>
-    </td>
-    <td width="50%" align="center">
-      <a href="./demo.mp4">
-        <img src="./demo.gif" alt="CodeNovel demo animation" width="100%">
-      </a>
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <a href="./demo.jpg">
+    <img src="./demo.jpg" alt="CodeNovel demo screenshot" width="100%">
+  </a>
+</p>
 
-- Animated preview: [`demo.gif`](./demo.gif)
-- Image preview: [`demo.jpg`](./demo.jpg)
-- Video demo: [`demo.mp4`](./demo.mp4)
+<p align="center">
+  <a href="./demo.mp4">
+    <img src="./demo.gif" alt="CodeNovel demo animation" width="100%">
+  </a>
+</p>
+
+Preview assets: [`demo.jpg`](./demo.jpg) | [`demo.gif`](./demo.gif) | [`demo.mp4`](./demo.mp4)
 
 ## Why This Exists
 
